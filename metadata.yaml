@@ -1,0 +1,26 @@
+name: ausf-operator
+display-name: 5G AUSF operator
+summary: 5G AUSF operator
+description: 5G AUSF operator
+
+containers:
+  ausf:
+    resource: ausf-image
+    mounts:
+      - storage: ausf-volume
+        location: /etc/ausf/
+
+resources:
+  ausf-image:
+    type: oci-image
+    description: OCI image for 5G ausf
+    upstream-source: omecproject/5gc-ausf:master-c84dff4
+
+storage:
+  ausf-volume:
+    type: filesystem
+    minimum-size: 1M
+
+requires:
+  nrf:
+    interface: nrf

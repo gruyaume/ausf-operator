@@ -34,6 +34,7 @@ class AUSFOperatorCharm(CharmBase):
         self._nrf_requires = NRFRequires(charm=self, relationship_name="nrf")
         self.framework.observe(self.on.ausf_pebble_ready, self._on_ausf_pebble_ready)
         self.framework.observe(self._nrf_requires.on.nrf_available, self._on_ausf_pebble_ready)
+        self.framework.observe(self.on.nrf_relation_joined, self._on_ausf_pebble_ready)
         self._service_patcher = KubernetesServicePatch(
             charm=self,
             ports=[
@@ -80,7 +81,6 @@ class AUSFOperatorCharm(CharmBase):
             return
         if not self._nrf_data_is_available:
             self.unit.status = WaitingStatus("Waiting for NRF data to be available")
-            event.defer()
             return
         if not self._config_file_is_written:
             self._write_config_file(
